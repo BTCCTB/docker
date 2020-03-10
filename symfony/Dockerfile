@@ -2,6 +2,8 @@ FROM php:7.3-apache
 
 # Set main params
 ENV APP_HOME /var/www/html
+ARG USER_ID
+ARG GROUP_ID
 
 # Install all the dependencies and enable PHP modules
 RUN apt-get update \
@@ -45,7 +47,7 @@ RUN rm -r $APP_HOME
 RUN mkdir -p $APP_HOME/public
 
 # Change uid and gid of apache to docker user uid/gid
-RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
+RUN usermod -u $USER_ID www-data && groupmod -g $GROUP_ID www-data
 RUN chown -R www-data:www-data $APP_HOME
 
 # Put apache and php config for Symfony, enable sites
@@ -57,11 +59,19 @@ RUN a2enmod rewrite
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
-RUN composer global require hirak/prestissimo
 
 # Install Symfony tool
 RUN wget https://get.symfony.com/cli/installer -O - | bash && \
   mv /root/.symfony/bin/symfony /usr/local/bin/symfony
+
+# Switch user
+RUN groupadd -f --gid $GROUP_ID user
+RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID user
+
+USER user
+
+# Optimize composer load
+RUN composer global require hirak/prestissimo
 
 # Set working directory
 WORKDIR $APP_HOME
