@@ -1,4 +1,4 @@
-FROM enabel/symfony:7.3
+FROM enabel/symfony:latest
 
 # Install Xdebug in case development environment
 RUN pecl install xdebug-2.8.1 && docker-php-ext-enable xdebug
