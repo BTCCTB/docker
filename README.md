@@ -1,8 +1,23 @@
 # docker
 Docker images
 
-## enabel/symfony
-Docker image built on the official php-apache Docker image. 
+## How to
+To build/publish you can use the [Makefile](./Makefile)
+```bash
+# Build & publish all images
+$ make install 
+
+# Build & publish group of images
+# nodejs: Docker image for node js
+$ make nodejs
+# symfony: httpd & php docker images suitable for Symfony (http no debug)
+$ make symfony
+# symfony-dev: httpd & php docker images suitable for Symfon in dev (http/https/xdebug) 
+$ make symfony-dev
+```
+
+## enabel/php-symfony
+Docker image built on the official php-fpm Docker image. 
 This image is suitable for Symfony applications 
 
 ### php extensions
@@ -16,49 +31,45 @@ This image is suitable for Symfony applications
 - opcache
 - apc/apcu
 
-### Apache modules
-- rewrite
-
 ### extra tools
 - Symfony CLI
 - Composer
 
-### How to build
-```bash 
-$ docker build ./symfony -t enabel/symfony
-```
-
-### How to publish
-```bash 
-$ docker build ./symfony -t enabel/symfony
-$ docker build ./symfony -t enabel/symfony:7.3
-$ docker push enabel/symfony
-```
-
-## enabel/symfony-dev
-Docker image built on the official enabel/symfony Docker image.
+## enabel/php-symfony-dev
+Docker image built on the enabel/php-sysmfony Docker image.
 This image is suitable for Symfony applications in DEV environment
 
 ### php extensions
-- all extensions included in enabel/symfony
+- all extensions included in enabel/php-sysmfony
 - xdebug
 
-### Apache modules
-- all modules included in enabel/symfony
+## enabel/httpd-symfony
+Custom docker image to serve httpd on port 80
+This image is suitable for Symfony applications 
+
+### httpd modules
+- rewrite
+- proxy 
+- proxy_fcgi
+- proxy_balancer 
+- proxy_http 
+- proxy_ajp
+
+## enabel/httpd-symfony-dev
+Docker image built on the enabel/httpd-symfony Docker image.
+This image serve httpd on port 80 & 443
+This image is suitable for Symfony applications 
+
+### httpd modules
+- all modules included in enabel/php-sysmfony
 - ssl
 
-### extra tools
-- all tools included in enabel/symfony
-- Generated certificates
+### extra
+- Self signed certificate generate by mkcert
 
-### How to build
-```bash 
-$ docker build ./symfony-dev -t enabel/symfony-dev
-```
+## enabel/nodejs
+Docker image built on the official node Docker image. 
+This image is suitable for building assets with yarn/webpack
 
-### How to publish
-```bash 
-$ docker build ./symfony-dev -t enabel/symfony-dev
-$ docker build ./symfony-dev -t enabel/symfony-dev:7.3
-$ docker push enabel/symfony-dev
-```
+### extra
+- Change working dir to `APP_HOME` /var/www/html by default
