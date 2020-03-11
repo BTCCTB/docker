@@ -63,11 +63,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ 
 RUN wget https://get.symfony.com/cli/installer -O - | bash && \
   mv /root/.symfony/bin/symfony /usr/local/bin/symfony
 
-# Switch user
-RUN groupadd -f --gid $GROUP_ID user
-RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID user
-
-USER user
+# Switch user/group id
+RUN groupmod --gid $GROUP_ID root
 
 # Optimize composer load
 RUN composer global require hirak/prestissimo
