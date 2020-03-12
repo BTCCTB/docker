@@ -30,7 +30,8 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-di
     && docker-php-ext-install gd
 
 # Support opcache
-RUN docker-php-ext-configure opcache --enable-opcache
+RUN docker-php-ext-install opcache
+COPY opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
 # Install APCu and APC backward compatibility
 RUN pecl install apcu \
